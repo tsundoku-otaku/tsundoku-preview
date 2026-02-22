@@ -121,11 +121,13 @@ jobs:
             tsundoku-x86_64-r${{ env.COMMIT_COUNT }}.apk
           draft: ${{ github.event.inputs.dry-run }}
           prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.TSUNDOKU_BOT_TOKEN }}
 
       - name: Prune old releases
         uses: dev-drprasad/delete-older-releases@dfbe6be2a006e9475dfcbe5b8d201f1824c2a9fe # v0.3.4
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TSUNDOKU_BOT_TOKEN }}
         with:
           keep_latest: 28
           delete_tags: true
