@@ -73,7 +73,7 @@ jobs:
             echo "Latest Tag: $tag_name"
           else
             echo "Failed to get repository information"
-            exit 1
+            exit 0
           fi
 
           prev_commit_count=$(echo "$tag_name" | sed -e "s/^r//")
@@ -106,9 +106,8 @@ jobs:
           body: |
             ### Commits
 
-            https://github.com/tsundoku-otaku/tsundoku/compare/${{ env.PREV_RELEASE_SHA }}...${{ env.CURRENT_SHA }}
+            Initial Release!
 
-            ${{ env.COMMIT_LOGS }}
 
             <!-->
             > [!TIP]
