@@ -6,4 +6,4 @@ This repository houses the preview builds for [Tsundoku](https://github.com/tsun
 
 For downloads, see [Releases](https://github.com/tsundoku-otaku/tsundoku-preview/releases).
 
-To download the stable release, see https://tsundoku.app/download/
+To download the stable release, see [https://tsundoku.app/download/](https://github.com/tsundoku-otaku/tsundoku/releases)
