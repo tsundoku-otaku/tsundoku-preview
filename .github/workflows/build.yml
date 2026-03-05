@@ -33,6 +33,45 @@ jobs:
           repository: 'tsundoku-otaku/tsundoku'
           fetch-depth: 0
           ref: ${{ github.event.inputs.git-ref }}
+      - name: Prepare Changelog
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+
+          commit_count=$(git rev-list --count HEAD)
+          echo "COMMIT_COUNT=$commit_count" >> $GITHUB_ENV
+          current_sha=$(git rev-parse --short HEAD)
+          echo "CURRENT_SHA=$current_sha" >> $GITHUB_ENV
+
+          tag_name=$(gh release list --repo tsundoku-otaku/tsundoku-preview --exclude-drafts --exclude-pre-releases --json tagName --limit 1 --jq 'select(length > 0) | .[0].tagName')
+          if [ -n "$tag_name" ]; then
+            echo "Latest Tag: $tag_name"
+          else
+            echo "Failed to get repository information"
+            exit 1
+          fi
+
+          prev_commit_count=$(echo "$tag_name" | sed -e "s/^r//")
+          commit_count_diff=$(expr $commit_count - $prev_commit_count)
+          echo "COMMIT_COUNT_DIFF=$commit_count_diff" >> $GITHUB_ENV
+          prev_release_sha=$(git rev-parse --short HEAD~$commit_count_diff)
+          echo "PREV_RELEASE_SHA=$prev_release_sha" >> $GITHUB_ENV
+
+          echo "COMMIT_LOGS<<{delimiter}
+          $(curl -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/tsundoku-otaku/tsundoku/compare/$prev_release_sha...$current_sha" \
+            | jq '[.commits[]|{message:(.commit.message | split("\n")), username:.author.login}]' \
+            | jq -r '.[]|"- \(.message | first) (@\(.username))"')
+          {delimiter}" >> $GITHUB_ENV
+
+      - name: Verify Commit Count
+        run: |
+          set -e
+
+          echo "${{ env.COMMIT_COUNT }}"
+          test ${{ env.COMMIT_COUNT }} -gt 1 || exit 1
+          test ${{ env.COMMIT_COUNT_DIFF }} -gt 0 || exit 1
 
       - name: Set up JDK
         uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
@@ -63,30 +102,6 @@ jobs:
         run: |
           set -e
 
-          commit_count=$(git rev-list --count HEAD)
-          echo "COMMIT_COUNT=$commit_count" >> $GITHUB_ENV
-          current_sha=$(git rev-parse --short HEAD)
-          echo "CURRENT_SHA=$current_sha" >> $GITHUB_ENV
-
-          tag_name=$(gh release list --repo tsundoku-otaku/tsundoku-preview --exclude-drafts --exclude-pre-releases --json tagName --limit 1 --jq 'select(length > 0) | .[0].tagName')
-          if [ -n "$tag_name" ]; then
-            echo "Latest Tag: $tag_name"
-          else
-            echo "Failed to get repository information"
-            exit 1
-          fi
-
-          prev_commit_count=$(echo "$tag_name" | sed -e "s/^r//")
-          commit_count_diff=$(expr $commit_count - $prev_commit_count)
-          prev_release_sha=$(git rev-parse --short HEAD~$commit_count_diff)
-          echo "PREV_RELEASE_SHA=$prev_release_sha" >> $GITHUB_ENV
-
-          echo "COMMIT_LOGS<<{delimiter}
-          $(curl -H "Accept: application/vnd.github.v3+json" \
-            "https://api.github.com/repos/tsundoku-otaku/tsundoku/compare/$prev_release_sha...$current_sha" \
-            | jq '[.commits[]|{message:(.commit.message | split("\n")), username:.author.login}]' \
-            | jq -r '.[]|"- \(.message | first) (@\(.username))"')
-          {delimiter}" >> $GITHUB_ENV
 
       - name: Clean up build artifacts
         run: |
