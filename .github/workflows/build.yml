@@ -80,7 +80,7 @@ jobs:
           distribution: temurin
 
       - name: Set up gradle
-        uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5.0.1
+        uses: gradle/actions/setup-gradle@0723195856401067f7a2779048b490ace7a47d7c # v5.0.2
 
       - name: Build APK
         run: ./gradlew assemblePreview -Pinclude-telemetry -Penable-updater
@@ -114,7 +114,7 @@ jobs:
           mv app/build/outputs/apk/preview/app-x86_64-preview-signed.apk tsundoku-x86_64-r${{ env.COMMIT_COUNT }}.apk
 
       - name: Create release
-        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
+        uses: softprops/action-gh-release@153bb8e04406b158c6c84fc1615b65b24149a1fe # v2.6.1
         with:
           tag_name: r${{ env.COMMIT_COUNT }}
           name: Tsundoku Preview r${{ env.COMMIT_COUNT }}
