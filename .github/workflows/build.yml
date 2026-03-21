@@ -114,7 +114,7 @@ jobs:
           mv app/build/outputs/apk/preview/app-x86_64-preview-signed.apk tsundoku-x86_64-r${{ env.COMMIT_COUNT }}.apk
 
       - name: Create release
-        uses: softprops/action-gh-release@153bb8e04406b158c6c84fc1615b65b24149a1fe # v2.6.1
+        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
         with:
           tag_name: r${{ env.COMMIT_COUNT }}
           name: Tsundoku Preview r${{ env.COMMIT_COUNT }}
