@@ -102,11 +102,11 @@ jobs:
         run: |
           set -e
 
-          mv app/build/outputs/apk/preview/app-universal-preview-signed.apk tsundoku-r${{ env.COMMIT_COUNT }}.apk
-          mv app/build/outputs/apk/preview/app-arm64-v8a-preview-signed.apk tsundoku-arm64-v8a-r${{ env.COMMIT_COUNT }}.apk
-          mv app/build/outputs/apk/preview/app-armeabi-v7a-preview-signed.apk tsundoku-armeabi-v7a-r${{ env.COMMIT_COUNT }}.apk
-          mv app/build/outputs/apk/preview/app-x86-preview-signed.apk tsundoku-x86-r${{ env.COMMIT_COUNT }}.apk
-          mv app/build/outputs/apk/preview/app-x86_64-preview-signed.apk tsundoku-x86_64-r${{ env.COMMIT_COUNT }}.apk
+          mv app/build/outputs/apk/preview/app-universal-preview.apk tsundoku-r${{ env.COMMIT_COUNT }}.apk
+          mv app/build/outputs/apk/preview/app-arm64-v8a-preview.apk tsundoku-arm64-v8a-r${{ env.COMMIT_COUNT }}.apk
+          mv app/build/outputs/apk/preview/app-armeabi-v7a-preview.apk tsundoku-armeabi-v7a-r${{ env.COMMIT_COUNT }}.apk
+          mv app/build/outputs/apk/preview/app-x86-preview.apk tsundoku-x86-r${{ env.COMMIT_COUNT }}.apk
+          mv app/build/outputs/apk/preview/app-x86_64-preview.apk tsundoku-x86_64-r${{ env.COMMIT_COUNT }}.apk
 
       - name: Create release
         uses: softprops/action-gh-release@718ea10b132b3b2eba29c1007bb80653f286566b # v3.0.1
