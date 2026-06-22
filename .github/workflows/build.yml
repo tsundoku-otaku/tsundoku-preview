@@ -85,6 +85,7 @@ jobs:
       - name: Build APK
         run: ./gradlew assemblePreview -Pinclude-telemetry -Penable-updater
         env:
+          GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g"
           storeFileBase64: ${{ secrets.SIGNING_KEY }}
           storePassword: ${{ secrets.KEY_STORE_PASSWORD }}
           keyAlias: ${{ secrets.ALIAS }}
