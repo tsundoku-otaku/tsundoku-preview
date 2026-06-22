@@ -15,6 +15,10 @@ on:
         required: false
         type: boolean
 
+env:
+  TSUNDOKU_GITHUB_RELEASE: true
+
+
 jobs:
   build:
     name: Build app
